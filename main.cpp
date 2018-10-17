@@ -1,6 +1,4 @@
 #include <iostream>
-#include <string.h>
-#include <utility>
 #include <algorithm>
 #include <fstream>
 
@@ -48,76 +46,35 @@ int main(){
     int pesos[] = {2 ,4 ,5 ,3 ,9};
     int valorMax = mochila(capacidadeMax, pesos, beneficio, nElementos);*/
 
-    FILE *arquivo;
-    arquivo = fopen("instancias/mochila01.txt", "r"); //abre arquivo em modo leitura
+    int ord[1000000];
+	string teste = "mochila02.txt";
+	ifstream in(teste.c_str());
+	char num[10];
+	int fim = 0;
+	while(!in.eof()){
+		in >> num;
+		ord[fim] = atoi(num);
+		fim++;
+	}
+	
+	int nElementos = ord[0];
+	int capacidadeMax = ord[1];
+	int pesos[nElementos];
+	int beneficio[nElementos];
+	int count = 0;
 
-    if (arquivo == NULL){
-        puts("arquivo nao encontrado");
-        exit(1);
-    }
+	for (int i=2; i < 2*nElementos+2; i = i+2)
+	{
+		pesos[count] = ord[i];
+		beneficio[count] = ord[i+1];
+		count++;
+	}
 
-    int QuantidadeLinhas = 0;
-    int nElementos;
-    char linha[999];
-    char *token;
-    int capacidadeMax;
-
-
-    while(1){
-        fgets(linha, 999, arquivo);
-        if (feof(arquivo)){
-            break;
-        }
-        if(QuantidadeLinhas == 1)
-            break;
-
-        token = strtok(linha, " ");
-
-        int k = 0;
-        while(token!=NULL){
-            if(QuantidadeLinhas == 0){
-                if(k == 0)
-                    nElementos = atoi(token);
-                else
-                    capacidadeMax = atoi(token);
-            }
-            token = strtok(NULL, " ");
-            k++;
-        }
-        QuantidadeLinhas++;
-    }
-
-    int beneficio[nElementos];
-    int pesos[nElementos];
-
-    while(1){
-        fgets(linha, 999, arquivo);
-        if (feof(arquivo)){
-            break;
-        }
-
-        token = strtok(linha, " ");
-
-        int k = 0;
-        while(token!=NULL){
-            if(!k)
-                pesos[QuantidadeLinhas - 1] = atoi(token);
-            else
-                beneficio[QuantidadeLinhas - 1] = atoi(token);
-
-            token = strtok(NULL, " ");
-            k++;
-        }
-        QuantidadeLinhas++;
-    }
-    
-    fclose(arquivo);
-
-    int valorMax = mochila(capacidadeMax, pesos, beneficio, nElementos);    
-    cout << "Valor máximo " << valorMax << endl;
+    cout << "Resultado utilizando " << teste << " = "<<  mochila(capacidadeMax,pesos,beneficio,nElementos) << endl;
 
     return 0;
 }
+
 
 
 
